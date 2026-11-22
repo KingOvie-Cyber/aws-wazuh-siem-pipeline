@@ -1,23 +1,16 @@
 # Screenshots
 
-Drop your own redacted dashboard screenshots here before pushing to GitHub.
+This folder holds the evidence images referenced throughout the README and docs — the Wazuh dashboard views used in the investigation walkthrough.
 
-Suggested filenames (referenced in the main README):
-- `dashboard-investigation.png` — the Events view showing the failed root
-  login rows (rule 80254, level 5) alongside surrounding events
+## Expected files
 
-## Before adding any screenshot, redact:
+| Filename | Description |
+|---|---|
+| `dashboard-investigation.png` | Wazuh **Events** view, filtered to `rule.groups: amazon`, showing 571 ingested CloudTrail/GuardDuty events over a 48-hour window. The highlighted rows show 3 failed root `ConsoleLogin` attempts occurring within under 1 second of each other (rule 80254, severity level 5 — the highest level observed in the dataset), alongside surrounding successful logins, IAM activity, and two distinct API error types (`Client.InvalidInstanceID.Malformed` and `NoSuchEntityException`) for context. |
 
-- `data.aws.sourceIPAddress` — your real public IP
-- `data.aws.userIdentity.accessKeyId` — real access key IDs
-- Your AWS account ID, if visible anywhere in the UI chrome
-- Your S3 bucket name, if you'd rather not disclose it
+## What this image demonstrates
 
-**Use a solid, fully opaque black box over the entire field — not a blur.**
-A blur filter preserves enough of the underlying pixel pattern to be
-reversible, especially if the same value has ever appeared unblurred
-elsewhere (e.g. an earlier screenshot, a chat history, a terminal recording).
-
-The safest option is to remove the sensitive columns from the dashboard view
-entirely (column header dropdown → Remove column) before taking the
-screenshot, so there's nothing to redact after the fact.
+- End-to-end log delivery from AWS CloudTrail through S3 into the Wazuh dashboard
+- Wazuh's rule engine correctly escalating failed root authentication attempts to a higher severity level than routine successful activity
+- A realistic mix of event types (successes, client errors, and the high-severity failed-login cluster) in a single investigative view
+- The basis for the root-login investigation example documented in the main README
