@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListBucket",
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+      "Resource": "arn:aws:s3:::<BUCKET_NAME>"
+    },
+    {
+      "Sid": "ReadLogs",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::<BUCKET_NAME>/*"
+    },
+    {
+      "Sid": "DecryptGuardDuty",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "<KMS_KEY_ARN>"
+    },
+    {
+      "Sid": "DescribeFlowLogs",
+      "Effect": "Allow",
+      "Action": "ec2:DescribeFlowLogs",
+      "Resource": "*"
+    }
+  ]
+}

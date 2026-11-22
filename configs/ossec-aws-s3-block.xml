@@ -1,0 +1,47 @@
+<!--
+  Wazuh aws-s3 wodle configuration.
+  Replace <BUCKET_NAME>, <ACCOUNT_ID>, and <REGION> with your own values.
+  Goes inside /var/ossec/etc/ossec.conf.
+
+  NOTE on paths:
+  - cloudtrail: no <path> needed — the module builds
+    AWSLogs/<account>/CloudTrail/<region>/ internally.
+  - guardduty / vpcflow: <path> IS required, pointing at the prefix
+    GuardDuty / Flow Logs delivery actually writes to.
+  See docs/05-troubleshooting-log.md (Issue 3) for what happens if you
+  add a <path> to the cloudtrail block.
+-->
+<wodle name="aws-s3">
+  <disabled>no</disabled>
+  <interval>10m</interval>
+  <run_on_start>yes</run_on_start>
+  <skip_on_error>yes</skip_on_error>
+
+  <!-- CloudTrail -->
+  <bucket type="cloudtrail">
+    <name><BUCKET_NAME></name>
+    <aws_account_id><ACCOUNT_ID></aws_account_id>
+    <regions><REGION></regions>
+    <only_logs_after>2026-NOV-01</only_logs_after>
+    <aws_profile>wazuh</aws_profile>
+  </bucket>
+
+  <!-- GuardDuty -->
+  <bucket type="guardduty">
+    <name><BUCKET_NAME></name>
+    <path>AWSLogs/<ACCOUNT_ID>/GuardDuty</path>
+    <regions><REGION></regions>
+    <only_logs_after>2026-NOV-01</only_logs_after>
+    <aws_profile>wazuh</aws_profile>
+  </bucket>
+
+  <!-- VPC Flow Logs -->
+  <bucket type="vpcflow">
+    <name><BUCKET_NAME></name>
+    <aws_account_id><ACCOUNT_ID></aws_account_id>
+    <path>AWSLogs/<ACCOUNT_ID>/vpcflowlogs</path>
+    <regions><REGION></regions>
+    <only_logs_after>2026-NOV-01</only_logs_after>
+    <aws_profile>wazuh</aws_profile>
+  </bucket>
+</wodle>
